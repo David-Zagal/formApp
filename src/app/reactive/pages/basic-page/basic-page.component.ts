@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ValidatorsService } from 'src/app/shared/service/validators.service';
 
 const priceDefault: number = 0;
 const inStorageDefault: number = 0;
@@ -17,12 +18,12 @@ const rtx5090 = {
 })
 export class BasicPageComponent implements OnInit {
 
-	constructor (private fb: FormBuilder) {}
+	constructor (private fb: FormBuilder, private validatorsService: ValidatorsService) {}
 
 	public myForm: FormGroup = this.fb.group ({
 		name: ['', [Validators.required, Validators.minLength (3)]],
 		price: [priceDefault, [Validators.required, Validators.min (0)]],
-		inStorage: [inStorageDefault, [Validators.required, Validators.min (0)]]
+		inStorage: [inStorageDefault, [Validators.required, Validators.min (0)]],
 	});
 
 	ngOnInit (): void {
@@ -30,7 +31,7 @@ export class BasicPageComponent implements OnInit {
 	}
 
 	isValidField (field: string): boolean | null {
-		return this.myForm.controls[field].errors && this.myForm.controls[field].touched;
+		return this.validatorsService.isValidField (this.myForm, field);
 		// return this.myForm.controls[field].getError ('required') && this.myForm.controls[field].touched;
 	}
 
